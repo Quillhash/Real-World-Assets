@@ -1,3 +1,4 @@
 # RWAs
 
-<img width="1127" alt="Real World Assets (RWAs) in blockchain-Map 1" src="https://github.com/Quillhash/RWAs/assets/99099366/ff3254b5-090b-4b84-93f5-fe6391211caf">
+<img width="497" alt="untitled-Map 1" src="https://github.com/Quillhash/RWAs/assets/99099366/76225b86-5368-4c50-a5d7-dff32cb11421">
+
