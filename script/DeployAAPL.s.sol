@@ -6,18 +6,27 @@ import { HelperConfig } from "./HelperConfig.s.sol";
 import { AAPL } from "../src/AAPL.sol";
 
 contract DeployAAPL is Script {
-    address public aaplFeed = 0x7E7B45b08F68EC69A99AAb12e42FcCB078e10094;
-    address public ethUsdFeed = 0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419;
-    function run() external returns (AAPL, HelperConfig) {
-        HelperConfig helperConfig = new HelperConfig();
+    function run() external {
+        // Get params
+        (address aaplFeed, address ethFeed, uint256 deployerKey) = getAaplRequirements();
 
-        (address wethUsdPriceFeed, address weth, uint256 deployerKey) =
-            helperConfig.activeNetworkConfig();
-
+        // Actually deploy
         vm.startBroadcast(deployerKey);
-        AAPL aapl = new AAPL(aaplFeed, ethUsdFeed);
-
+        deployAAPL(aaplFeed, ethFeed);
         vm.stopBroadcast();
-        return (aapl, helperConfig);
+    }
+
+    function getAaplRequirements() public returns (address, address, uint256) {
+        HelperConfig helperConfig = new HelperConfig();
+        (address ethFeed, address aaplFeed, uint256 deployerKey) = helperConfig.activeNetworkConfig();
+
+        if (aaplFeed == address(0) || ethFeed == address(0)) {
+            revert("something is wrong");
+        }
+        return (aaplFeed, ethFeed, deployerKey);
+    }
+
+    function deployAAPL(address aaplFeed, address ethFeed) public returns (AAPL) {
+        return new AAPL(aaplFeed, ethFeed);
     }
 }
