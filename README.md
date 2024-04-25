@@ -220,7 +220,7 @@ The AAPL smart contract is designed to tokenize Apple shares, allowing users to 
 -   The function accesses two mappings: s_aaplMintedPerUser and s_ethCollateralPerUser, using the user's address as the key.
 -   It retrieves and returns the total amounts of AAPL tokens minted and ETH collateral deposited by the specified user.
 
-### Auditing Process for Tokenization of Real-World Assets
+## Auditing Process for Tokenization of Real-World Assets
 
 Tokenizing real-world assets on the blockchain involves creating digital representations of physical or non-physical assets (such as stocks, bonds, commodities, or real estate) through tokens. This process requires rigorous security, legal compliance, and accurate representation of asset values through reliable data feeds. The use of oracles and off-chain data sources is central to ensuring that the token values reflect the real-world prices and attributes of the assets they represent.
 
