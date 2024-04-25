@@ -8,47 +8,50 @@ import { ERC20Mock } from "@openzeppelin/contracts/mocks/token/ERC20Mock.sol";
 contract HelperConfig is Script {
     NetworkConfig public activeNetworkConfig;
 
+    MockV3Aggregator public aaplFeedMock;
+    MockV3Aggregator public ethUsdFeedMock;
+
     uint8 public constant DECIMALS = 8;
     int256 public constant ETH_USD_PRICE = 2000e8;
 
     struct NetworkConfig {
-        address wethUsdPriceFeed;
-        address weth;
+        address ethUsdPriceFeed;
+        address aaplPriceFeed;
         uint256 deployerKey;
     }
 
     uint256 public DEFAULT_ANVIL_PRIVATE_KEY = 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80;
 
     constructor() {
-        if (block.chainid == 11_155_111) {
-            activeNetworkConfig = getSepoliaEthConfig();
+        if(block.chainid == 137) {
+            activeNetworkConfig = getPolygonConfig();
         } else {
             activeNetworkConfig = getOrCreateAnvilEthConfig();
         }
     }
 
-    function getSepoliaEthConfig() public view returns (NetworkConfig memory sepoliaNetworkConfig) {
-        sepoliaNetworkConfig = NetworkConfig({
-            wethUsdPriceFeed: 0x694AA1769357215DE4FAC081bf1f309aDC325306, // ETH / USD
-            weth: 0xdd13E55209Fd76AfE204dBda4007C227904f0a81,
+    function getPolygonConfig() internal view returns (NetworkConfig memory config) {
+        config = NetworkConfig({
+            ethUsdPriceFeed: 0xF9680D99D6C9589e2a93a78A04A279e509205945,
+            aaplPriceFeed: 0x7E7B45b08F68EC69A99AAb12e42FcCB078e10094,
             deployerKey: vm.envUint("PRIVATE_KEY")
-        });
+         });
     }
 
     function getOrCreateAnvilEthConfig() public returns (NetworkConfig memory anvilNetworkConfig) {
         // Check to see if we set an active network config
-        if (activeNetworkConfig.wethUsdPriceFeed != address(0)) {
+        if (activeNetworkConfig.ethUsdPriceFeed != address(0)) {
             return activeNetworkConfig;
         }
 
         vm.startBroadcast();
-        MockV3Aggregator ethUsdPriceFeed = new MockV3Aggregator(DECIMALS, ETH_USD_PRICE);
-        ERC20Mock wethMock = new ERC20Mock();
+        aaplFeedMock = new MockV3Aggregator(DECIMALS, ETH_USD_PRICE);
+        ethUsdFeedMock = new MockV3Aggregator(DECIMALS, ETH_USD_PRICE);
         vm.stopBroadcast();
 
         anvilNetworkConfig = NetworkConfig({
-            wethUsdPriceFeed: address(ethUsdPriceFeed), // ETH / USD
-            weth: address(wethMock),
+            ethUsdPriceFeed: address(ethUsdFeedMock), // ETH / USD
+            aaplPriceFeed: address(aaplFeedMock),
             deployerKey: DEFAULT_ANVIL_PRIVATE_KEY
         });
     }
