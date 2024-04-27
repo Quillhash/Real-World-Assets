@@ -278,7 +278,7 @@ Now, let’s apply this auditing framework to the provided AAPL smart contract:
 
 5. User Role and Access Control
 
--   Access Controls: The contract currently does not implement any special access controls beyond the typical ownership patterns. Depending on the business model, you might need role-based access control mechanisms. 7. Documentation and Code Clarity
+-   Access Controls: The contract currently does not implement any special access controls beyond the typical ownership patterns. Depending on the business model, you might need role-based access control mechanisms.
 
 ### Integration of Fuzz Testing in the Audit Process
 
